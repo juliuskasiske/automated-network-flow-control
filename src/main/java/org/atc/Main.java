@@ -17,12 +17,10 @@ public class Main {
         layout.connect(5, 6, 2000);
         layout.connect(4, 7, 500);
         layout.connect(7, 8, 2000);
-        layout.connect(7, 5, 2000);
-
         layout.connect(8, 9, 1000);
         layout.connect(8, 10, 1000);
        // System.out.println(layout.getMileposts().get(2).getDownstreamEdges());
-        System.out.println(layout.toString(true));
+        System.out.println(layout.toString());
         System.out.println(layout.getMileposts().get(8).getDownstreamEdges());
 
     }

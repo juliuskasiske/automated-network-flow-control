@@ -4,11 +4,19 @@ public class Edge {
     private int length;
     private Milepost upstreamNode;
     private Milepost downstreamNode;
+    private short numberTracks;
 
     public Edge(int length, Milepost upstreamNode, Milepost downstreamNode) {
         this.length = length;
         this.upstreamNode = upstreamNode;
         this.downstreamNode = downstreamNode;
+        this.numberTracks = 1;
+    }
+    public Edge(int length, Milepost upstreamNode, Milepost downstreamNode, short numberTracks) {
+        this.length = length;
+        this.upstreamNode = upstreamNode;
+        this.downstreamNode = downstreamNode;
+        this.numberTracks = numberTracks;
     }
 
     public int getLength() {
