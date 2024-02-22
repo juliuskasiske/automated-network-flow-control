@@ -34,4 +34,13 @@ public class Edge {
     public void setDownstreamNode(Milepost downstreamNode) {
         this.downstreamNode = downstreamNode;
     }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "length=" + length +
+                ", upstreamNode=" + upstreamNode +
+                ", downstreamNode=" + downstreamNode +
+                '}';
+    }
 }

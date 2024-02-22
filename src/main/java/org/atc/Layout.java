@@ -19,6 +19,10 @@ public class Layout {
         mileposts.put(milepostNumber, new Milepost(milepostNumber));
     }
 
+    public Map<Integer, Milepost> getMileposts() {
+        return mileposts;
+    }
+
     public void connect(int upstream, int downstream, int distance) {
         // check if both Mileposts are contained in layout
         boolean upstreamContained = mileposts.keySet().contains(upstream);
@@ -128,14 +132,12 @@ public class Layout {
     @Override
     public String toString() {
         List<Milepost> upstreamSources = findSources(Direction.UPSTREAM);
-        List<Milepost> downstreamSources = findSources(Direction.DOWNSTREAM);
-
-
-        //StringBuilder builder = new StringBuilder();
-        //builder.append(LayoutBuilder.spaceMileposts(upstreamSources) + "\n");
-        // builder.append(buildString(upstreamSources, LayoutBuilder.spaceMileposts(upstreamSources)));
-
         return this.layoutString.buildFinalString(upstreamSources);
+    }
+
+    public String toString(boolean distanceBased) {
+        List<Milepost> upstreamSources = findSources(Direction.UPSTREAM);
+        return this.layoutString.buildFinalDistanceString(upstreamSources);
     }
 
     private enum Direction {

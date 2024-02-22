@@ -10,18 +10,20 @@ public class Main {
             layout.addMilepost(i);
         }
 
-        layout.connect(1, 2, 5);
-        layout.connect(2, 3, 10);
-        layout.connect(2, 4, 5);
-        layout.connect(3, 5, 8);
-        layout.connect(5, 6, 2);
-        layout.connect(4, 7, 5);
-        layout.connect(7, 8, 10);
-        layout.connect(8, 9, 5);
-        layout.connect(8, 10, 5);
+        layout.connect(1, 2, 1000);
+        layout.connect(2, 3, 1000);
+        layout.connect(2, 4, 500);
+        layout.connect(3, 5, 1500);
+        layout.connect(5, 6, 2000);
+        layout.connect(4, 7, 500);
+        layout.connect(7, 8, 2000);
+        layout.connect(7, 5, 2000);
 
-        System.out.println(layout);
-
+        layout.connect(8, 9, 1000);
+        layout.connect(8, 10, 1000);
+       // System.out.println(layout.getMileposts().get(2).getDownstreamEdges());
+        System.out.println(layout.toString(true));
+        System.out.println(layout.getMileposts().get(8).getDownstreamEdges());
 
     }
 }
