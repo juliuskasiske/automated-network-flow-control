@@ -95,8 +95,8 @@ public class LayoutString {
     private StringBuilder appendWithDistance(Edge currentEdge, StringBuilder currentLine) {
         currentLine.append(currentEdge.getUpstreamNode());
         int edgeLength = currentEdge.getLength();
-        int repitions = edgeLength >= DASH_MEASURE ? edgeLength / DASH_MEASURE : 1;
-        currentLine.append(" " + "-".repeat(repitions) + "> ");
+        int repetitions = edgeLength >= DASH_MEASURE ? edgeLength / DASH_MEASURE : 1;
+        currentLine.append(" " + "-".repeat(repetitions) + "> ");
         return currentLine;
     }
 }
