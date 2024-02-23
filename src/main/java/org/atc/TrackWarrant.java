@@ -47,6 +47,10 @@ public class TrackWarrant {
         liveId = liveIdCounter++;
     }
 
+    public void setDenied() {
+        status = Status.DENIED;
+    }
+
     public UUID getRequestId() {
         return requestId;
     }

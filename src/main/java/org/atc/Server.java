@@ -49,5 +49,20 @@ public class Server {
             response.type("application/json");
             return gson.toJson(responseTrackWarrant);
         });
+
+        get("/jobs", (request, response) -> {
+            // Fetch the job IDs from the timetable
+            Set<String> jobIds = dispatcher.getTimetable().getJobIds();
+
+            // Convert the Set of job IDs to JSON
+            Gson gson = new Gson();
+            String jobIdsJson = gson.toJson(jobIds);
+
+            // Set the response type to JSON
+            response.type("application/json");
+
+            // Return the job IDs as a JSON array
+            return jobIdsJson;
+        });
     }
 }

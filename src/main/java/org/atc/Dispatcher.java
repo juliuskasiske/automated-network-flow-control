@@ -38,10 +38,12 @@ public class Dispatcher {
         Milepost givenUntil = layout.acquireItinerary(itinerary, requestingJob);
         if (givenUntil.equals(requestedTrackWarrant.getOrigin())) {
             this.requestQueue.add(requestedTrackWarrant);
+            requestedTrackWarrant.setDenied();
         } else {
+            requestedTrackWarrant.setDestination(givenUntil);
             requestedTrackWarrant.setLive();
         }
-        requestedTrackWarrant.setDestination(givenUntil);
+
         return requestedTrackWarrant;
     }
 
