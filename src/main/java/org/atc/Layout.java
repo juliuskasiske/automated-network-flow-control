@@ -160,8 +160,6 @@ public class Layout {
         return null;
     }
 
-
-
     @Override
     public String toString() {
         List<Milepost> upstreamSources = findSources(Direction.UPSTREAM);

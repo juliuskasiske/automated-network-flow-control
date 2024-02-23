@@ -56,7 +56,7 @@ public class Milepost {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Milepost milepost = (Milepost) o;
-        return milepostNumber == milepost.milepostNumber;
+        return milepostNumber.equals(milepost.milepostNumber);
     }
 
     @Override

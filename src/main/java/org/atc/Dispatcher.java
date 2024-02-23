@@ -47,6 +47,10 @@ public class Dispatcher {
         return requestedTrackWarrant;
     }
 
+    public List<Milepost> findItinerary(String originMilePostNumber, String destinationMilePostNumber) {
+        return layout.findItinerary(originMilePostNumber, destinationMilePostNumber);
+    }
+
     public void approve(Milepost from, Milepost to, Job job) {
         Milepost approvedUntil = layout.acquireItinerary(layout.findItinerary(from.getMilepostNumber(), to.getMilepostNumber()), job);
         System.out.println("TrackWarrant approved until: " + approvedUntil);

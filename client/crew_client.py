@@ -25,3 +25,16 @@ def get_meta_data():
     response = requests.get(base_url + "meta")
     return response.json()
 
+def get_itinerary(origin, destination):
+    params = {
+    'origin': origin,
+    'destination': destination
+    }
+    response = requests.get(base_url + "itinerary", params)
+    if response.status_code == 200:
+        return response.json()
+        
+    else:
+        return response.status_code
+
+

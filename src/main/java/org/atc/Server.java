@@ -2,10 +2,8 @@ package org.atc;
 import static spark.Spark.*;
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Server {
     private static Dispatcher dispatcher;
@@ -86,6 +84,24 @@ public class Server {
 
             // Return the job IDs as a JSON array
             return bothSetsJson;
+        });
+
+        get("/itinerary", (request, response) -> {
+            String origin = request.queryParams("origin");
+            String destination = request.queryParams("destination");
+            List<String> itinerary = dispatcher.findItinerary(origin, destination)
+                    .stream()
+                    .map(milepost -> milepost.getMilepostNumber())
+                    .collect(Collectors.toList());
+
+            // Convert to JSON
+            Gson gson = new Gson();
+            String itineraryJson = gson.toJson(itinerary);
+
+            // Set the response type to JSON
+            response.type("application/json");
+
+            return itineraryJson;
         });
     }
 }

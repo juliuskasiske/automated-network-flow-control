@@ -1,0 +1,11 @@
+liveTrackWarrant:
+  destination:
+    milepostNumber: MP 34
+  job:
+    liableCrewName: ''
+    status: PENDING
+  origin:
+    milepostNumber: Barstow
+  requestId: 3860c5d0-07b2-490f-9def-968ce91e6e31
+  status: LIVE
+position: MP 34
