@@ -11,7 +11,7 @@ public class TrackWarrant {
     }
     private UUID requestId;
     private static int liveIdCounter = 1;
-    private int liveId;
+    private transient int liveId;
     private Milepost origin;
     private Milepost destination;
     private Status status;
@@ -73,5 +73,9 @@ public class TrackWarrant {
 
     public Job getJob() {
         return job;
+    }
+
+    public void setDestination(Milepost destination) {
+        this.destination = destination;
     }
 }

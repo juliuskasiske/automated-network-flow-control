@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public class Edge {
     private int length;
-    private Milepost upstreamNode;
-    private Milepost downstreamNode;
+    private transient Milepost upstreamNode;
+    private transient Milepost downstreamNode;
     private List<Track> tracks;
 
     public Edge(int length, Milepost upstreamNode, Milepost downstreamNode) {
@@ -35,12 +35,13 @@ public class Edge {
                return true;
            }
         }
+
         return false;
     }
 
     public boolean releaseTrack(Job job) {
         for (Track track : tracks) {
-            if (track.getOccupant().getJobID().equals(job.getJobID())) {
+            if (track.getOccupant().getJobID() == job.getJobID()) {
                 track.setOccupant(null);
                 return true;
             }

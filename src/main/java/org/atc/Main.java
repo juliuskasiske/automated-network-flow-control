@@ -1,5 +1,5 @@
 package org.atc;
-
+import com.google.gson.Gson;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,6 +7,7 @@ import java.util.Set;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+        // define layout
         Layout layout = new Layout();
         Set<Integer> milepostNumbers = Set.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         layout.createMileposts(milepostNumbers);
@@ -21,13 +22,23 @@ public class Main {
         layout.connect(8, 9, 1000);
         layout.connect(8, 10, 1000);
 
-        Dispatcher dispatcher = new Dispatcher(layout);
+        // define timetable
+        Timetable timetable = new Timetable();
+        Set<String> jobIds = Set.of("MISLAU-I", "LAUMIS-I", "HARSEA-L");
+        timetable.setJobIds(jobIds);
+
+        Dispatcher dispatcher = new Dispatcher(layout, timetable);
         System.out.println(layout.toString());
-        Job job = new Job(Timetable.JobId.M_MISLAU, "S", dispatcher);
-        TrackWarrant tw = new TrackWarrant(new Milepost(9), new Milepost(1), job);
+        Job job = new Job("MISLAU-I", "S", dispatcher);
+        TrackWarrant tw = new TrackWarrant(layout.getMileposts().get(1), layout.getMileposts().get(8), job);
+
        // System.out.println(dispatcher.approveTrackWarrant(tw));
 
-        dispatcher.approve(layout.getMileposts().get(1), layout.getMileposts().get(10), job);
-
+        dispatcher.approve(layout.getMileposts().get(4), layout.getMileposts().get(8), job);
+        dispatcher.approve(layout.getMileposts().get(1), layout.getMileposts().get(8), job);
+        dispatcher.approve(layout.getMileposts().get(10), layout.getMileposts().get(8), job);
+        Gson gson = new Gson();
+        String jsonified = gson.toJson(tw);
+        System.out.println(jsonified);
     }
 }

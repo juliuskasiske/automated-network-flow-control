@@ -9,14 +9,18 @@ public class Job {
         ACTIVE,
         COMPLETED
     }
-    private Timetable.JobId jobID;
+    private String jobID;
     private String liableCrewName;
-    private List<TrackWarrant> trackWarrantHistory;
+    private transient List<TrackWarrant> trackWarrantHistory;
     private Status status;
-    private Dispatcher dispatcher;
+    private transient Dispatcher dispatcher;
 
-    public Job(Timetable.JobId jobID, String liableCrewName, Dispatcher dispatcher) {
-        this.jobID = jobID;
+    public Job(String jobID, String liableCrewName, Dispatcher dispatcher) {
+        if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
+            this.jobID = jobID;
+        } else {
+            throw new IllegalStateException("The timetable does not contain jobId: " + jobID);
+        }
         this.liableCrewName = liableCrewName;
         this.dispatcher = dispatcher;
         trackWarrantHistory = new ArrayList<>();
@@ -29,14 +33,16 @@ public class Job {
     }
 
 
-
-
-    public Timetable.JobId getJobID() {
+    public String getJobID() {
         return jobID;
     }
 
-    public void setJobID(Timetable.JobId jobID) {
-        this.jobID = jobID;
+    public void setJobID(String jobID) {
+        if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
+            this.jobID = jobID;
+        } else {
+            throw new IllegalStateException("The timetable does not contain jobId: " + jobID);
+        }
     }
 
     public String getLiableCrewName() {

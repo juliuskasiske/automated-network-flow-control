@@ -4,8 +4,8 @@ import java.util.stream.Collectors;
 
 public class Milepost {
     private int milepostNumber;
-    private List<Edge> downstreamEdges;
-    private List<Edge> upstreamEdges;
+    private transient List<Edge> downstreamEdges;
+    private transient List<Edge> upstreamEdges;
 
     public Milepost(int milepostNumber) {
         this.milepostNumber = milepostNumber;

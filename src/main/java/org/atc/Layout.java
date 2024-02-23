@@ -1,5 +1,6 @@
 package org.atc;
 
+import javax.naming.NamingException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -130,18 +131,18 @@ public class Layout {
         Queue<Milepost> pollableItinerary = new LinkedList(itinerary);
         Milepost current = itinerary.get(0);
         Milepost next = itinerary.get(1);
+
         while (edgeAcquiredByJob(current, next, job)) {
             pollableItinerary.poll();
             current = pollableItinerary.peek();
             next = pollableItinerary.stream().skip(1).findFirst().orElse(null);
         }
-        return next == null ? current : next;
+        return current;
     }
 
     private boolean edgeAcquiredByJob(Milepost from, Milepost to, Job job) {
-        Edge directional = findEdge(from, to);
-        Edge antiDirectional = findEdge(to, from);
-        if (directional.acquireTrack(job) && antiDirectional.acquireTrack(job)) {
+        Edge edgeToAcquire = findEdge(from, to);
+        if (edgeToAcquire != null && edgeToAcquire.acquireTrack(job)) {
             return true;
         }
         return false;
