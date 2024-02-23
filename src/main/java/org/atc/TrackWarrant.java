@@ -10,21 +10,24 @@ public class TrackWarrant {
         COMPLETED;
     }
     private UUID requestId;
-    private static int liveIdCounter = 0;
+    private static int liveIdCounter = 1;
     private int liveId;
     private Milepost origin;
     private Milepost destination;
     private Status status;
+    private Job job;
 
     /**
      * When a request is initiated by crews, status is set to pending (inactive)
      * @param origin current position of crew
      * @param destination desired destination covered by the requested track warrant
      */
-    public TrackWarrant(Milepost origin, Milepost destination) {
+    public TrackWarrant(Milepost origin, Milepost destination, Job job) {
         this.origin = origin;
         this.destination = destination;
+        this.job = job;
         this.status = Status.PENDING;
+        this.requestId = UUID.randomUUID();
     }
 
     /**
@@ -41,5 +44,34 @@ public class TrackWarrant {
 
     public void setLive() {
         status = Status.LIVE;
+        liveId = liveIdCounter++;
+    }
+
+    public UUID getRequestId() {
+        return requestId;
+    }
+
+    public static int getLiveIdCounter() {
+        return liveIdCounter;
+    }
+
+    public int getLiveId() {
+        return liveId;
+    }
+
+    public Milepost getOrigin() {
+        return origin;
+    }
+
+    public Milepost getDestination() {
+        return destination;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Job getJob() {
+        return job;
     }
 }

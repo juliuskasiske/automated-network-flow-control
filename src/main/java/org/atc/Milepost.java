@@ -52,6 +52,19 @@ public class Milepost {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Milepost milepost = (Milepost) o;
+        return milepostNumber == milepost.milepostNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(milepostNumber);
+    }
+
+    @Override
     public String toString() {
         return String.valueOf(this.milepostNumber);
     }

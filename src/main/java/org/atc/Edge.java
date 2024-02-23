@@ -1,22 +1,51 @@
 package org.atc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 public class Edge {
     private int length;
     private Milepost upstreamNode;
     private Milepost downstreamNode;
-    private short numberTracks;
+    private List<Track> tracks;
 
     public Edge(int length, Milepost upstreamNode, Milepost downstreamNode) {
         this.length = length;
         this.upstreamNode = upstreamNode;
         this.downstreamNode = downstreamNode;
-        this.numberTracks = 1;
+        this.tracks = Arrays.asList(new Track(null));
+
     }
     public Edge(int length, Milepost upstreamNode, Milepost downstreamNode, short numberTracks) {
         this.length = length;
         this.upstreamNode = upstreamNode;
         this.downstreamNode = downstreamNode;
-        this.numberTracks = numberTracks;
+        this.tracks = new ArrayList<>();
+        for (int i = 0; i < numberTracks; i++) {
+            tracks.add(new Track(null));
+        }
+    }
+
+    public boolean acquireTrack(Job job) {
+        for (Track track : tracks) {
+           if (track.isEmpty()) {
+               track.setOccupant(job);
+               return true;
+           }
+        }
+        return false;
+    }
+
+    public boolean releaseTrack(Job job) {
+        for (Track track : tracks) {
+            if (track.getOccupant().getJobID().equals(job.getJobID())) {
+                track.setOccupant(null);
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getLength() {

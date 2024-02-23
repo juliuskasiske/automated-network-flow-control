@@ -1,14 +1,15 @@
 package org.atc;
 
+import java.util.HashSet;
+import java.util.Set;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
         Layout layout = new Layout();
-
-        for (int i = 1; i <= 10; i++) {
-            layout.addMilepost(i);
-        }
+        Set<Integer> milepostNumbers = Set.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        layout.createMileposts(milepostNumbers);
 
         layout.connect(1, 2, 1000);
         layout.connect(2, 3, 1000);
@@ -19,9 +20,14 @@ public class Main {
         layout.connect(7, 8, 2000);
         layout.connect(8, 9, 1000);
         layout.connect(8, 10, 1000);
-       // System.out.println(layout.getMileposts().get(2).getDownstreamEdges());
+
+        Dispatcher dispatcher = new Dispatcher(layout);
         System.out.println(layout.toString());
-        System.out.println(layout.getMileposts().get(8).getDownstreamEdges());
+        Job job = new Job(Timetable.JobId.M_MISLAU, "S", dispatcher);
+        TrackWarrant tw = new TrackWarrant(new Milepost(9), new Milepost(1), job);
+       // System.out.println(dispatcher.approveTrackWarrant(tw));
+
+        dispatcher.approve(layout.getMileposts().get(1), layout.getMileposts().get(10), job);
 
     }
 }
