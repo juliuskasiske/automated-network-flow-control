@@ -20,7 +20,8 @@ def request_track_warrant(trackwarrant):
         print("Failed to create track warrant. Status code:" + str(response.status_code))
         return response.status_code
 
-def get_job_numbers():
-    response = requests.get(base_url + "jobs")
-    return list(response.json())
+
+def get_meta_data():
+    response = requests.get(base_url + "meta")
+    return response.json()
 

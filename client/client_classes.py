@@ -53,7 +53,7 @@ class Job:
         }
 
 class Milepost:
-    def __init__(self, milepost_number: int):
+    def __init__(self, milepost_number: str):
         self.milepost_number = milepost_number
 
     def to_dict(self):

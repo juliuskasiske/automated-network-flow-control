@@ -3,21 +3,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Milepost {
-    private int milepostNumber;
+    private String milepostNumber;
     private transient List<Edge> downstreamEdges;
     private transient List<Edge> upstreamEdges;
 
-    public Milepost(int milepostNumber) {
+    public Milepost(String milepostNumber) {
         this.milepostNumber = milepostNumber;
         this.downstreamEdges = new ArrayList<>();
         this.upstreamEdges = new ArrayList<>();
     }
 
-    public int getMilepostNumber() {
+    public String getMilepostNumber() {
         return milepostNumber;
     }
 
-    public void setMilepostNumber(int milepostNumber) {
+    public void setMilepostNumber(String milepostNumber) {
         this.milepostNumber = milepostNumber;
     }
 
@@ -37,8 +37,8 @@ public class Milepost {
         this.upstreamEdges = upstreamEdges;
     }
 
-    public void connectDownstream(Milepost downstreamNode, int distance) {
-        Edge newEdge = new Edge(distance, this, downstreamNode);
+    public void connectDownstream(Milepost downstreamNode, int distance, int numberTracks) {
+        Edge newEdge = new Edge(distance, this, downstreamNode, numberTracks);
         this.getDownstreamEdges().add(newEdge);
         downstreamNode.getUpstreamEdges().add(newEdge);
     }

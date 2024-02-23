@@ -29,9 +29,9 @@ public class Dispatcher {
     }
     public TrackWarrant handleTrackWarrant(TrackWarrant requestedTrackWarrant) {
         // find itinerary needed for track warrant
-        int originInt = Integer.parseInt(requestedTrackWarrant.getOrigin().toString());
-        int destinationInt = Integer.parseInt(requestedTrackWarrant.getDestination().toString());
-        List<Milepost> itinerary = layout.findItinerary(originInt, destinationInt);
+        String origin = requestedTrackWarrant.getOrigin().toString();
+        String destination = requestedTrackWarrant.getDestination().toString();
+        List<Milepost> itinerary = layout.findItinerary(origin, destination);
 
         // traverse itinerary and acquire as long as free tracks are found
         Job requestingJob = requestedTrackWarrant.getJob();

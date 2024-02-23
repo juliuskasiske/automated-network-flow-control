@@ -9,18 +9,36 @@ public class Main {
     public static void main(String[] args) {
         // define layout
         Layout layout = new Layout();
-        Set<Integer> milepostNumbers = Set.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Set<String> milepostNumbers = Set.of("Portola", "MP 1", "Pier B", "MP 3", "MP 10", "MP 14",
+                                        "MP 18", "Crossroad Jct.", "MP 27", "MP 34", "Barstow", "Harrison",
+                                        "Roseville", "MP 135", "MP 130", "MP 116", "MP 112", "MP 109",
+                                        "MP 107", "MP 105", "Phoenix");
         layout.createMileposts(milepostNumbers);
 
-        layout.connect(1, 2, 1000);
-        layout.connect(2, 3, 1000);
-        layout.connect(2, 4, 500);
-        layout.connect(3, 5, 1500);
-        layout.connect(5, 6, 2000);
-        layout.connect(4, 7, 500);
-        layout.connect(7, 8, 2000);
-        layout.connect(8, 9, 1000);
-        layout.connect(8, 10, 1000);
+        // connect main branch 1
+        layout.connect("Portola", "MP 1", 400, 16);
+        layout.connect("Pier B", "MP 1", 400, 16);
+        layout.connect("MP 1", "MP 3", 200, 1);
+        layout.connect("MP 3", "MP 10", 400, 2);
+        layout.connect("MP 10", "MP 14", 350, 2);
+        layout.connect("MP 14", "Crossroad Jct.", 550, 1);
+        layout.connect("Crossroad Jct.", "MP 27", 350, 1);
+        layout.connect("MP 27", "MP 34", 200, 1);
+        layout.connect("MP 27", "Harrison", 400, 1);
+        layout.connect("MP 34", "Barstow", 400, 16);
+
+        // connect main branch 2
+        layout.connect("Roseville", "MP 135", 400, 16);
+        layout.connect("MP 135", "MP 130", 250, 2);
+        layout.connect("MP 130", "Crossroad Jct.", 200, 2);
+        layout.connect("Crossroad Jct.", "MP 116", 700, 1);
+        layout.connect("MP 116", "MP 112", 600, 2);
+        layout.connect("MP 112", "MP 109", 400, 1);
+        layout.connect("MP 109", "MP 107", 200, 3);
+        layout.connect("MP 107", "MP 105", 100, 1);
+        layout.connect("MP 105", "Phoenix", 400, 16);
+
+
 
         // define timetable
         Timetable timetable = new Timetable();
@@ -30,13 +48,15 @@ public class Main {
         Dispatcher dispatcher = new Dispatcher(layout, timetable);
         System.out.println(layout.toString());
         Job job = new Job("MISLAU-I", "S", dispatcher);
-        TrackWarrant tw = new TrackWarrant(layout.getMileposts().get(1), layout.getMileposts().get(8), job);
+        TrackWarrant tw = new TrackWarrant(layout.getMileposts().get("MP 1"), layout.getMileposts().get("Crossroad Jct."), job);
 
        // System.out.println(dispatcher.approveTrackWarrant(tw));
-
+        /*
         dispatcher.approve(layout.getMileposts().get(4), layout.getMileposts().get(8), job);
         dispatcher.approve(layout.getMileposts().get(1), layout.getMileposts().get(8), job);
         dispatcher.approve(layout.getMileposts().get(10), layout.getMileposts().get(8), job);
+
+         */
         Gson gson = new Gson();
         String jsonified = gson.toJson(tw);
         System.out.println(jsonified);

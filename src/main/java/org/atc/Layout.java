@@ -5,8 +5,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Layout {
-    private Set<Integer> milepostNumbers;
-    private Map<Integer, Milepost> mileposts;
+    private Set<String> milepostNumbers;
+    private Map<String, Milepost> mileposts;
     private LayoutString layoutString;
 
     public Layout() {
@@ -15,31 +15,31 @@ public class Layout {
         this.milepostNumbers = new HashSet<>();
     }
 
-    public Layout(Set<Integer> milepostNumbers) {
+    public Layout(Set<String> milepostNumbers) {
         this.mileposts = new HashMap<>();
         this.layoutString = new LayoutString();
         createMileposts(milepostNumbers);
     }
 
-    public void createMileposts(Set<Integer> milepostNumbers) {
+    public void createMileposts(Set<String> milepostNumbers) {
         this.milepostNumbers = milepostNumbers;
-        for (Integer milepostNumber : milepostNumbers) {
+        for (String milepostNumber : milepostNumbers) {
             addMilepost(milepostNumber);
         }
     }
 
-    private void addMilepost(int milepostNumber) {
+    private void addMilepost(String milepostNumber) {
         if (mileposts.keySet().contains(milepostNumber)) {
             throw new RuntimeException("A Milepost with the specified number already exists in the layout!");
         }
         mileposts.put(milepostNumber, new Milepost(milepostNumber));
     }
 
-    public Map<Integer, Milepost> getMileposts() {
+    public Map<String, Milepost> getMileposts() {
         return mileposts;
     }
 
-    public void connect(int upstream, int downstream, int distance) {
+    public void connect(String upstream, String downstream, int distance, int numberTracks) {
         // check if both Mileposts are contained in layout
         boolean upstreamContained = mileposts.keySet().contains(upstream);
         boolean downstreamContained = mileposts.keySet().contains(downstream);
@@ -55,7 +55,7 @@ public class Layout {
         if (downstreamConnection || upstreamConnection) {
             throw new RuntimeException("The Mileposts are already (partially) connected");
         }
-        mileposts.get(upstream).connectDownstream(mileposts.get(downstream), distance);
+        mileposts.get(upstream).connectDownstream(mileposts.get(downstream), distance, numberTracks);
     }
 
     private List<Milepost> findSources(Direction direction) {
@@ -72,7 +72,7 @@ public class Layout {
         return sources;
     }
 
-    public List<Milepost> findItinerary(int startMilepostNumber, int endMilepostNumber) {
+    public List<Milepost> findItinerary(String startMilepostNumber, String endMilepostNumber) {
         Milepost start = mileposts.get(startMilepostNumber);
         Milepost end = mileposts.get(endMilepostNumber);
 

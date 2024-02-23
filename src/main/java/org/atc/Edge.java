@@ -18,7 +18,7 @@ public class Edge {
         this.tracks = Arrays.asList(new Track(null));
 
     }
-    public Edge(int length, Milepost upstreamNode, Milepost downstreamNode, short numberTracks) {
+    public Edge(int length, Milepost upstreamNode, Milepost downstreamNode, int numberTracks) {
         this.length = length;
         this.upstreamNode = upstreamNode;
         this.downstreamNode = downstreamNode;
