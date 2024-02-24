@@ -29,6 +29,9 @@ public class Timetable {
         } else {
             throw new IllegalArgumentException("Job IDs cannot be set at this point");
         }
+    }
+    public String persist_job(Job job) {
+        return "insert into job values (" + job.getJobID() + ", " + job.getPosition() + ")";
 
     }
 }

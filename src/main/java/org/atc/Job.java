@@ -14,6 +14,7 @@ public class Job {
     private transient List<TrackWarrant> trackWarrantHistory;
     private Status status;
     private transient Dispatcher dispatcher;
+    private Milepost position;
 
     public Job(String jobID, String liableCrewName, Dispatcher dispatcher) {
         if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
@@ -68,4 +69,9 @@ public class Job {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Milepost getPosition() {
+        return position;
+    }
 }
+
