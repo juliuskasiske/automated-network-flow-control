@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public class Server {
     private static Dispatcher dispatcher;
+    private static Timetable timetable;
     private static boolean sessionInitialized = false;
 
     public static void initializeSession() {
@@ -44,9 +45,7 @@ public class Server {
         // define timetable
         Timetable timetable = new Timetable();
         Set<String> jobIds = Set.of("MISLAU-I", "LAUMIS-I", "HARSEA-L");
-        timetable.setJobIds(jobIds);
 
-        dispatcher = new Dispatcher(layout, timetable);
 
         sessionInitialized = true;
     }
@@ -69,10 +68,8 @@ public class Server {
 
         get("/meta", (request, response) -> {
             Map<String, Set<String>> bothSets = new HashMap<>();
-            Set<String> jobIds = dispatcher.getTimetable().getJobIds();
             Set<String> nodes = dispatcher.getLayout().getMileposts().keySet();
 
-            bothSets.put("jobIds", jobIds);
             bothSets.put("nodes", nodes);
 
             // Convert to JSON
@@ -85,6 +82,27 @@ public class Server {
             // Return the job IDs as a JSON array
             return bothSetsJson;
         });
+
+        get("/updatePosition", ((request, response) -> {
+            String jobId = request.queryParams("jobId");
+            String newPosition = request.queryParams("newPosition");
+            if (timetable.getJobInfos().keySet().contains(jobId) &&
+                timetable.getLayout().getMileposts().keySet().contains(newPosition)) {
+                Optional<Job> jobOptional = timetable.getJobs()
+                        .stream()
+                        .filter(job1 -> job1.getJobID().equals(jobId))
+                        .findFirst();
+                if (jobOptional.isPresent()) {
+                    Job job = jobOptional.get();
+                    job.setPosition(timetable.getLayout().getMileposts().get(newPosition));
+                    DatabaseConnector.updateJobPosition(job);
+                    return new Gson().toJson(true);
+                } else {
+                    return new Gson().toJson(false);
+                }
+            }
+            return new Gson().toJson(false);
+        }));
 
         get("/itinerary", (request, response) -> {
             String origin = request.queryParams("origin");

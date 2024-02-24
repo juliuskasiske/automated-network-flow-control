@@ -7,21 +7,15 @@ import java.util.Queue;
 
 public class Dispatcher {
     private Layout layout;
-    private Timetable timetable;
     private Queue<TrackWarrant> requestQueue;
 
-    public Dispatcher(Layout layout, Timetable timetable) {
+    public Dispatcher(Layout layout) {
         this.layout = layout;
-        this.timetable = timetable;
         this.requestQueue = new LinkedList<>();
     }
 
     public Layout getLayout() {
         return layout;
-    }
-
-    public Timetable getTimetable() {
-        return timetable;
     }
 
     public Queue<TrackWarrant> getRequestQueue() {

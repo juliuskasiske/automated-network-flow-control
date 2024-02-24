@@ -1,6 +1,11 @@
 create database if not exists timetable;
 use timetable;
 
+
+drop table job;
+drop table trackWarrant;
+drop table trackWarrantNodes;
+
 create table if not exists job (
 	jobId varchar(50) primary key,
     position varchar(50) not null

@@ -17,11 +17,7 @@ public class Job {
     private Milepost position;
 
     public Job(String jobID, Milepost position, Dispatcher dispatcher) {
-        if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
-            this.jobID = jobID;
-        } else {
-            throw new IllegalStateException("The timetable does not contain jobId: " + jobID);
-        }
+        this.jobID = jobID;
         this.position = position;
         this.dispatcher = dispatcher;
         trackWarrantHistory = new ArrayList<>();
@@ -33,17 +29,16 @@ public class Job {
         dispatcher.getRequestQueue().add(requestedTrackWarrant);
     }
 
+    public String generateUpdatedPositionSqlString() {
+        return "UPDATE job SET position = '" + this.position + "' WHERE jobId = '" + this.jobID + "';";
+    }
 
     public String getJobID() {
         return jobID;
     }
 
     public void setJobID(String jobID) {
-        if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
-            this.jobID = jobID;
-        } else {
-            throw new IllegalStateException("The timetable does not contain jobId: " + jobID);
-        }
+        this.jobID = jobID;
     }
 
     public String getLiableCrewName() {
@@ -72,6 +67,12 @@ public class Job {
 
     public Milepost getPosition() {
         return position;
+    }
+
+    public void setPosition(Milepost position) {
+        if (dispatcher.getLayout().getMileposts().values().contains(position)) {
+            this.position = position;
+        }
     }
 }
 
