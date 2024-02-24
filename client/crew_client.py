@@ -1,6 +1,6 @@
 import requests, json
 
-base_url = 'http://localhost:8080/'
+base_url = 'https://188.228.46.115:8080/'
 
 # Example of sending a POST request to create a new track warrant
 new_track_warrant = {"requestId":"f43c3294-b736-40ef-93c8-b6eccb6fb0fa",
@@ -33,7 +33,7 @@ def get_itinerary(origin, destination):
     response = requests.get(base_url + "itinerary", params)
     if response.status_code == 200:
         return response.json()
-        
+
     else:
         return response.status_code
 
