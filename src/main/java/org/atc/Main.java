@@ -1,5 +1,9 @@
 package org.atc;
 import com.google.gson.Gson;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +18,7 @@ public class Main {
                                         "Roseville", "MP 135", "MP 130", "MP 116", "MP 112", "MP 109",
                                         "MP 107", "MP 105", "Phoenix");
         layout.createMileposts(milepostNumbers);
-
+        System.out.println(System.getenv("DB_USER"));
         // connect main branch 1
         layout.connect("Portola", "MP 1", 400, 16);
         layout.connect("Pier B", "MP 1", 400, 16);
@@ -38,17 +42,33 @@ public class Main {
         layout.connect("MP 107", "MP 105", 100, 1);
         layout.connect("MP 105", "Phoenix", 400, 16);
 
-
-
         // define timetable
         Timetable timetable = new Timetable();
-        Set<String> jobIds = Set.of("MISLAU-I", "LAUMIS-I", "HARSEA-L");
+        Set<String> jobIds = Set.of("MISLAU-I", "LAUMIS-I", "HARSEA-L", "MISLAU-III");
         timetable.setJobIds(jobIds);
-
         Dispatcher dispatcher = new Dispatcher(layout, timetable);
+
+
+        // test DB connection
+        DatabaseConnector connector = new DatabaseConnector(DatabaseConnector.Database.TIMETABLE);
+        try (Connection connection = connector.openConnection()) {
+            connection.close();
+            Connection connection1 = connector.openConnection();
+            Job job = new Job("MISLAU-I", layout.getMileposts().get("MP 1"), dispatcher);
+            PreparedStatement preparedStatement = connection1.prepareStatement(timetable.persist_job(job));
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Insert successful!");
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+
+        }
+
+
         System.out.println(layout.toString());
-        Job job = new Job("MISLAU-I", "S", dispatcher);
-        TrackWarrant tw = new TrackWarrant(layout.getMileposts().get("MP 1"), layout.getMileposts().get("Crossroad Jct."), job);
+        //Job job = new Job("MISLAU-I", "S", dispatcher);
+        //TrackWarrant tw = new TrackWarrant(layout.getMileposts().get("MP 1"), layout.getMileposts().get("Crossroad Jct."), job);
 
        // System.out.println(dispatcher.approveTrackWarrant(tw));
         /*
@@ -58,7 +78,7 @@ public class Main {
 
          */
         Gson gson = new Gson();
-        String jsonified = gson.toJson(tw);
-        System.out.println(jsonified);
+        //String jsonified = gson.toJson(tw);
+        //System.out.println(jsonified);
     }
 }

@@ -15,6 +15,7 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'ch.qos.logback:logback-classic:1.2.10'
+    implementation 'mysql:mysql-connector-java:8.0.29' // Check for the latest version
 }
 
 test {

@@ -16,13 +16,13 @@ public class Job {
     private transient Dispatcher dispatcher;
     private Milepost position;
 
-    public Job(String jobID, String liableCrewName, Dispatcher dispatcher) {
+    public Job(String jobID, Milepost position, Dispatcher dispatcher) {
         if (dispatcher.getTimetable().getJobIds().contains(jobID)) {
             this.jobID = jobID;
         } else {
             throw new IllegalStateException("The timetable does not contain jobId: " + jobID);
         }
-        this.liableCrewName = liableCrewName;
+        this.position = position;
         this.dispatcher = dispatcher;
         trackWarrantHistory = new ArrayList<>();
         status = Status.PENDING;

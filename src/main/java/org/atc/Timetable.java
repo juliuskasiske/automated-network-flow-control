@@ -31,7 +31,6 @@ public class Timetable {
         }
     }
     public String persist_job(Job job) {
-        return "insert into job values (" + job.getJobID() + ", " + job.getPosition() + ")";
-
+        return "insert into job values ('" + job.getJobID() + "', '" + job.getPosition() + "');";
     }
 }
