@@ -2,7 +2,7 @@ package org.atc;
 
 import java.util.UUID;
 
-public class TrackWarrant {
+public class TrackWarrant implements SQLEntity {
     public enum Status {
         PENDING,
         DENIED,
@@ -49,6 +49,18 @@ public class TrackWarrant {
 
     public void setDenied() {
         status = Status.DENIED;
+    }
+
+    @Override
+    public String getInsertStatement() {
+        String jobId = getJob().getJobID();
+        String origin = getOrigin().getMilepostNumber();
+        String destination = getDestination().getMilepostNumber();
+        String statement =  "insert into trackWarrant values (" +
+                jobId + ", '" +
+                origin + "', " +
+                destination + ");";
+        return statement;
     }
 
     public UUID getRequestId() {

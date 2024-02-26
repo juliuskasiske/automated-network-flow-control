@@ -2,17 +2,22 @@ package org.atc;
 import static spark.Spark.*;
 import com.google.gson.Gson;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Server {
     private static Dispatcher dispatcher;
-    private static Timetable timetable;
+    private static Timetable timetable = new Timetable();
+    private static Layout layout = new Layout();
     private static boolean sessionInitialized = false;
 
-    public static void initializeSession() {
-        // define layout
-        Layout layout = new Layout();
+    public static void createDatabase() {
+        // run sql script for creation of tables and triggers
+    }
+
+    public static void defineLayout() {
+        // define network
         Set<String> milepostNumbers = Set.of("Portola", "MP 1", "Pier B", "MP 3", "MP 10", "MP 14",
                 "MP 18", "Crossroad Jct.", "MP 27", "MP 34", "Barstow", "Harrison",
                 "Roseville", "MP 135", "MP 130", "MP 116", "MP 112", "MP 109",
@@ -41,18 +46,52 @@ public class Server {
         layout.connect("MP 109", "MP 107", 200, 3);
         layout.connect("MP 107", "MP 105", 100, 1);
         layout.connect("MP 105", "Phoenix", 400, 16);
+    }
 
-        // define timetable
-        Timetable timetable = new Timetable();
-        Set<String> jobIds = Set.of("MISLAU-I", "LAUMIS-I", "HARSEA-L");
+    public static void defineTimetable() {
+        // define jobs
+        Set<String> jobIds = Set.of("U-507", "U-508", "U-509", "P-101", "P-102", "M-304",
+                                "M-504", "M-104", "M-441", "I-105", "I-108");
+        Map<String, String> jobInfos = new HashMap();
+        jobInfos.put("M-101", "Phoenix");
+        jobInfos.put("M-202", "Barstow");
+        jobInfos.put("I-110", "Harrison");
+        jobInfos.put("L-303", "Portola");
+        jobInfos.put("M-201", "Phoenix");
+        jobInfos.put("M-402", "Barstow");
+        jobInfos.put("I-210", "Harrison");
+        jobInfos.put("L-603", "Portola");
+        timetable.addAllJobs();
+    }
 
+    public static void orchestrateSessionStartup() {
+        // run createDatabase
+        createDatabase();
+        defineLayout();
+        defineTimetable();
+        // sequentially insert layout and timetable elements to database in the correct order
+        // mileposts first
+        for (Milepost milepost : layout.getMileposts().values()) {
+            DatabaseConnector.insertSqlEntity(milepost);
+        }
+        // edges second and then its tracks
+        for (Edge edge : layout.getEdges()) {
+            DatabaseConnector.insertSqlEntity(edge);
+            for (Track track : edge.getTracks()) {
+                DatabaseConnector.insertSqlEntity(track);
+            }
+        }
+        // now all jobs
+        for (Job job : timetable.getJobs()) {
+            DatabaseConnector.insertSqlEntity(job);
+        }
 
         sessionInitialized = true;
     }
 
     public static void main(String[] args) {
         if (!sessionInitialized) {
-            initializeSession();
+            orchestrateSessionStartup();
         }
         port(8080); // Spark will run on port 8080
 
@@ -94,7 +133,7 @@ public class Server {
                         .findFirst();
                 if (jobOptional.isPresent()) {
                     Job job = jobOptional.get();
-                    job.setPosition(timetable.getLayout().getMileposts().get(newPosition));
+                    job.setPosition(timetable.getLayout().getMileposts().get(newPosition), layout);
                     DatabaseConnector.updateJobPosition(job);
                     return new Gson().toJson(true);
                 } else {
@@ -118,7 +157,6 @@ public class Server {
 
             // Set the response type to JSON
             response.type("application/json");
-
             return itineraryJson;
         });
     }

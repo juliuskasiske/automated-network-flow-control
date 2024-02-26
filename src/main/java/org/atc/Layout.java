@@ -8,17 +8,20 @@ public class Layout {
     private Set<String> milepostNumbers;
     private Map<String, Milepost> mileposts;
     private LayoutString layoutString;
+    private List<Edge> edges;
 
     public Layout() {
         this.mileposts = new HashMap<>();
         this.layoutString = new LayoutString();
         this.milepostNumbers = new HashSet<>();
+        this.edges = new ArrayList<>();
     }
 
     public Layout(Set<String> milepostNumbers) {
         this.mileposts = new HashMap<>();
         this.layoutString = new LayoutString();
         createMileposts(milepostNumbers);
+        this.edges = new ArrayList<>();
     }
 
     public void createMileposts(Set<String> milepostNumbers) {
@@ -55,7 +58,7 @@ public class Layout {
         if (downstreamConnection || upstreamConnection) {
             throw new RuntimeException("The Mileposts are already (partially) connected");
         }
-        mileposts.get(upstream).connectDownstream(mileposts.get(downstream), distance, numberTracks);
+        mileposts.get(upstream).connectDownstream(mileposts.get(downstream), distance, numberTracks, this);
     }
 
     private List<Milepost> findSources(Direction direction) {
@@ -158,6 +161,10 @@ public class Layout {
             }
         }
         return null;
+    }
+
+    public List<Edge> getEdges() {
+        return edges;
     }
 
     @Override

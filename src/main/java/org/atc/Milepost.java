@@ -2,7 +2,7 @@ package org.atc;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Milepost {
+public class Milepost implements SQLEntity{
     private String milepostNumber;
     private transient List<Edge> downstreamEdges;
     private transient List<Edge> upstreamEdges;
@@ -11,6 +11,11 @@ public class Milepost {
         this.milepostNumber = milepostNumber;
         this.downstreamEdges = new ArrayList<>();
         this.upstreamEdges = new ArrayList<>();
+    }
+
+    @Override
+    public String getInsertStatement() {
+        return "insert into milepost values ('" + this.getMilepostNumber() + "');";
     }
 
     public String getMilepostNumber() {
@@ -37,8 +42,9 @@ public class Milepost {
         this.upstreamEdges = upstreamEdges;
     }
 
-    public void connectDownstream(Milepost downstreamNode, int distance, int numberTracks) {
+    public void connectDownstream(Milepost downstreamNode, int distance, int numberTracks, Layout layout) {
         Edge newEdge = new Edge(distance, this, downstreamNode, numberTracks);
+        layout.getEdges().add(newEdge);
         this.getDownstreamEdges().add(newEdge);
         downstreamNode.getUpstreamEdges().add(newEdge);
     }

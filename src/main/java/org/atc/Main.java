@@ -53,8 +53,6 @@ public class Main {
         jobInfos.put("WLCHAR-L", "Portola");
 
         Timetable timetable = new Timetable(jobInfos, layout);
-        boolean successTimetableInit = timetable.initializeTimetable(dispatcher);
-        System.out.println(successTimetableInit);
 
 
 

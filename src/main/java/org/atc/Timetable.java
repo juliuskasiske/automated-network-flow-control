@@ -1,5 +1,6 @@
 package org.atc;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Timetable {
 
     public Timetable() {
         this.jobs = new HashSet<>();
+        this.jobInfos = new HashMap<>();
     }
 
     public Set<Job> getJobs() {
@@ -34,22 +36,15 @@ public class Timetable {
             throw new IllegalArgumentException("Job IDs cannot be set at this point");
         }
     }
-    public String generatePersistSqlString(Job job) {
-        return "insert into job values ('" + job.getJobID() + "', '" + job.getPosition() + "');";
-    }
 
-    public boolean initializeTimetable(Dispatcher dispatcher) {
+    public boolean addAllJobs() {
         // check if all starting positions are in the layout mileposts
         for (String jobName : jobInfos.keySet()) {
             if (!layout.getMileposts().keySet().contains(jobInfos.get(jobName))) {
                 return false;
             }
-            Job newJob = new Job(jobName, layout.getMileposts().get(jobInfos.get(jobName)), dispatcher);
+            Job newJob = new Job(jobName, layout.getMileposts().get(jobInfos.get(jobName)));
             jobs.add(newJob);
-            boolean persistSuccess = DatabaseConnector.insertJob(newJob, this);
-            if (!persistSuccess) {
-                return false;
-            }
         }
         return true;
     }

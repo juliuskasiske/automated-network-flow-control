@@ -3,7 +3,7 @@ package org.atc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Job {
+public class Job implements SQLEntity {
     public enum Status {
         PENDING,
         ACTIVE,
@@ -16,21 +16,20 @@ public class Job {
     private transient Dispatcher dispatcher;
     private Milepost position;
 
-    public Job(String jobID, Milepost position, Dispatcher dispatcher) {
+    public Job(String jobID, Milepost position) {
         this.jobID = jobID;
         this.position = position;
-        this.dispatcher = dispatcher;
         trackWarrantHistory = new ArrayList<>();
         status = Status.PENDING;
     }
 
-    public void requestTrackWarrant(Milepost origin, Milepost destination) {
-        TrackWarrant requestedTrackWarrant = new TrackWarrant(origin, destination, this);
-        dispatcher.getRequestQueue().add(requestedTrackWarrant);
+    public String getPositionUpdateStatement() {
+        return "UPDATE job SET position = '" + this.position + "' WHERE jobId = '" + this.jobID + "';";
     }
 
-    public String generateUpdatedPositionSqlString() {
-        return "UPDATE job SET position = '" + this.position + "' WHERE jobId = '" + this.jobID + "';";
+    @Override
+    public String getInsertStatement() {
+        return "insert into job values ('" + this.getJobID() + "', '" + this.getPosition() + "');";
     }
 
     public String getJobID() {
@@ -69,8 +68,8 @@ public class Job {
         return position;
     }
 
-    public void setPosition(Milepost position) {
-        if (dispatcher.getLayout().getMileposts().values().contains(position)) {
+    public void setPosition(Milepost position, Layout layout) {
+        if (layout.getMileposts().values().contains(position)) {
             this.position = position;
         }
     }
